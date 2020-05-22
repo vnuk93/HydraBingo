@@ -56,12 +56,6 @@ namespace HydraBingo
             return servicio;
         }
 
-        public void GarbageService()
-        {
-            //var timer = new Timer(30000);
-            //timer.Elapsed += (sender, args) => GarbageDelete();
-            //timer.Start();
-        }
         public void GarbageDelete()
         {
             Console.WriteLine("> [GARBAGE] Start");

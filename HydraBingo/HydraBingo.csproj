@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Protos\bingo.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.12.0" />
     <PackageReference Include="Grpc.Core" Version="2.29.0" />
     <PackageReference Include="Grpc.Tools" Version="2.29.0">
@@ -19,7 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\bingo.proto" />
+    <Folder Include="Protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\Hydra.protos\bingo.proto">
+      <Link>Protos\bingo.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>
