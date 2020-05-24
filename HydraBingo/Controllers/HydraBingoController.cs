@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Bingo;
+using System.Runtime.Serialization;
 
 namespace HydraBingo.Controllers
 {
@@ -16,8 +17,7 @@ namespace HydraBingo.Controllers
             return Task.FromResult(new HelloReply { Message = "Hello " + request.Name });
         }
         public override Task<PingO> Ping(PingI request, ServerCallContext context)
-        {
-            
+        {           
             PingO _out = new PingO();
             var serviceinfo = _.InfoService(request.Id) == null ? "" : _.InfoService(request.Id).serviceID.ToString();
             if(serviceinfo != request.Id)
@@ -41,15 +41,46 @@ namespace HydraBingo.Controllers
         }
         public override Task<DeleteO> Delete (DeleteI request, ServerCallContext context)
         {
-            return Task.FromResult(new DeleteO { Res = false });
+            var _out = _.DeleteService(request.Id);
+            return Task.FromResult(new DeleteO { Res = _out });
         }
         public override Task<InfoO> Info(InfoI request, ServerCallContext context)
         {
-            return Task.FromResult(new InfoO {  });
+            var infoData = _.InfoService(request.Id);
+            return Task.FromResult(new InfoO { 
+                Id = infoData.serviceID.ToString(),
+                DelayNumber = infoData.delayNumber,
+                Group = infoData.group,
+                Name = infoData.name,
+                Packages = infoData.packages,
+                Status = infoData.status,
+                Version = infoData.version,
+                Ip = infoData.ip,
+                Port = infoData.port
+            });
         }
         public override Task<SearchO> Search(SearchI request, ServerCallContext context)
-        {
-            return Task.FromResult(new SearchO { });
+        {           
+            var datas = _.Search(request.Name);
+            var _out = new SearchO { };
+
+            foreach (var data in datas)
+            {
+                _out.Dummy.Add(new RegistryService { 
+                    Id = data.serviceID.ToString(),
+                    Name = data.name,
+                    Packages = data.packages,
+                    Version = data.version,
+                    Ip = data.ip,
+                    Status = data.status,
+                    DelayNumber = data.delayNumber,
+                    Port = data.port,
+                    Group = data.group
+                });
+
+            }
+
+            return Task.FromResult(_out);
         }
 
     }

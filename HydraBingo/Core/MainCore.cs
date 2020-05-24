@@ -35,13 +35,13 @@ namespace HydraBingo
 
         }
 
-        public void DeleteService(string id)
+        public bool DeleteService(string id)
         {
             var servicio = services.Find(x => x.serviceID == Guid.Parse(id));
             var tmp = servicio.serviceID;
             services.Remove(servicio);
             Console.WriteLine("> [DELETE] Service " + tmp + " deleted");
-
+            return true;
         }
 
         public Core.Models.MRegistryService InfoService(string id)
