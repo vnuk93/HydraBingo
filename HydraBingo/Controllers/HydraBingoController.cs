@@ -19,8 +19,8 @@ namespace HydraBingo.Controllers
         {           
             HeartbeatO _out = new HeartbeatO();
             var serviceinfo = _.InfoService(request.Data.Id) == null ? "" : _.InfoService(request.Data.Id).serviceID.ToString();
-            if(serviceinfo != request.Data.Id)
-            {
+            if(serviceinfo != request.Data.Id) //Linea de arriba comprueba si existe la ID de ese servicio.
+            { //inserta el servicio si no existe
                 Core.Models.MRegistryService newData = new Core.Models.MRegistryService();
                 newData.serviceID = Guid.Parse(request.Data.Id);
                 newData.name = request.Data.Name;
@@ -33,8 +33,24 @@ namespace HydraBingo.Controllers
                 _out.Id = _.AddService(newData).ToString();
                 _out.Status = newData.status;
             }
-            if (serviceinfo == request.Data.Id) {
+            if (serviceinfo == request.Data.Id) { //si existe se encarga de hacer un latido de corazon para indicar que esta activo.
                 _.Heartbeat(request.Data.Id);
+                //si el servicio es el balanceador de carga hacemos el latido y le enviamos un resume de todos los conectados actualmente.
+                if (request.Data.Name == "HydraBalancer") {
+                    //Descargamos todos los servicios
+                    var datas = _.ResumeAll();
+                    foreach (var data in datas) {
+                        _out.BingoResume.Add(new RegistryService
+                        {
+                            Name = data.name,
+                            Port = data.port,
+                            Ip = data.ip,
+                            Status = data.status,
+                            Id = data.serviceID.ToString()
+                        });
+                    }
+
+                }
             }
             return Task.FromResult(_out);
         }

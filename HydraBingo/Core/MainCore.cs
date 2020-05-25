@@ -82,5 +82,21 @@ namespace HydraBingo
             }
 
         }
+
+        public List<Core.Models.MRegistryService> ResumeAll() {
+
+            //List<Core.Models.MRegistryService> data = new List<Core.Models.MRegistryService>();
+
+            //foreach (var service in services)
+            //{
+            //    Core.Models.MRegistryService tmp = new Core.Models.MRegistryService();
+            //    tmp.name = service.name;
+            //    tmp.port = service.port;
+            //    tmp.ip = service.ip;
+            //    tmp.status = service.status;
+            //    data.Add(tmp);
+            //}
+            return services;
+        }
     }
 }
