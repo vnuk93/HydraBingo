@@ -9,18 +9,18 @@ namespace HydraBingo.Client
 {
     public class MainCore
     {
-        public MainCore(string IP, string port, PingI config)
+        public MainCore(string IP, string port, HeartbeatI config)
         {
             Channel channel = new Channel(IP + ":" + port, ChannelCredentials.Insecure); //Creamos un nuevo canal de cliente incresando direccion y puerto del servidor
             client = new Greeter.GreeterClient(channel); //Creamos un nuevo cliente, pasandole el servicio de proto (Greeter) y junto con el canal.
 
-            ID = config.Id;
-            status = config.Status;
+            ID = config.Data.Id;
+            status = config.Data.Status;
             serviceConfig = config;
 
-            Ping();
+            Heartbeat();
             var timer = new Timer(30000);
-            timer.Elapsed += (sender, args) => Ping();
+            timer.Elapsed += (sender, args) => Heartbeat();
             timer.Start();
             //channel.ShutdownAsync().Wait();
         }
@@ -30,17 +30,17 @@ namespace HydraBingo.Client
         public int IP { get; set; }
         public int port { get; set; }
         public int status { get; set; }
-        public PingI serviceConfig { get; set; }
+        public HeartbeatI serviceConfig { get; set; }
 
-        private void Ping()
+        private void Heartbeat()
         {
             try
             {
-                status = client.Ping(serviceConfig).Status;
-                Console.WriteLine("> [HydraBingo] Ping successful");
+                status = client.Heartbeat(serviceConfig).Status;
+                Console.WriteLine("> [HydraBingo] Heartbeat successful");
             }
             catch (Exception e) {
-                Console.WriteLine("> [HydraBingo] Ping error");
+                Console.WriteLine("> [HydraBingo] Heartbeat error");
 
             }
 

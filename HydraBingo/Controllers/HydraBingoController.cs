@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Bingo;
-using System.Runtime.Serialization;
 
 namespace HydraBingo.Controllers
 {
@@ -16,26 +15,26 @@ namespace HydraBingo.Controllers
         {
             return Task.FromResult(new HelloReply { Message = "Hello " + request.Name });
         }
-        public override Task<PingO> Ping(PingI request, ServerCallContext context)
+        public override Task<HeartbeatO> Heartbeat(HeartbeatI request, ServerCallContext context)
         {           
-            PingO _out = new PingO();
-            var serviceinfo = _.InfoService(request.Id) == null ? "" : _.InfoService(request.Id).serviceID.ToString();
-            if(serviceinfo != request.Id)
+            HeartbeatO _out = new HeartbeatO();
+            var serviceinfo = _.InfoService(request.Data.Id) == null ? "" : _.InfoService(request.Data.Id).serviceID.ToString();
+            if(serviceinfo != request.Data.Id)
             {
                 Core.Models.MRegistryService newData = new Core.Models.MRegistryService();
-                newData.serviceID = Guid.Parse(request.Id);
-                newData.name = request.Name;
-                newData.packages = request.Packages;
-                newData.version = request.Version;
-                newData.ip = request.Ip;
-                newData.status = request.Status;
-                newData.port = request.Port;
-                newData.group = request.Group;
+                newData.serviceID = Guid.Parse(request.Data.Id);
+                newData.name = request.Data.Name;
+                newData.packages = request.Data.Packages;
+                newData.version = request.Data.Version;
+                newData.ip = request.Data.Ip;
+                newData.status = request.Data.Status;
+                newData.port = request.Data.Port;
+                newData.group = request.Data.Group;
                 _out.Id = _.AddService(newData).ToString();
                 _out.Status = newData.status;
             }
-            if (serviceinfo == request.Id) {
-                _.Ping(request.Id);
+            if (serviceinfo == request.Data.Id) {
+                _.Heartbeat(request.Data.Id);
             }
             return Task.FromResult(_out);
         }

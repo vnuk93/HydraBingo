@@ -14,7 +14,7 @@ namespace HydraBingo
             timer.Elapsed += (sender, args) => GarbageDelete();
             timer.Start();
         }
-        // AddService y ping podrian ir juntos para resumir el codigo que el cliente mande un ping si no existe lo crea si exite la id hace ping. 
+        // AddService y Heartbeat podrian ir juntos para resumir el codigo que el cliente mande un Heartbeat si no existe lo crea si exite la id hace Heartbeat. 
         public Guid AddService(Core.Models.MRegistryService data)
         {
             Core.Models.MRegistryService add = new Core.Models.MRegistryService();
@@ -26,12 +26,12 @@ namespace HydraBingo
             return add.serviceID;
         }
         // El cliente tambien puede actualizar el status para así ponerse fuera de servicio si el lo considera.
-        public void Ping(string id)
+        public void Heartbeat(string id)
         {
             var servicio = services.Find(x => x.serviceID == Guid.Parse(id));
             servicio.up = true;
             servicio.delayNumber = 0;
-            Console.WriteLine("> [PING] Service " + servicio.name + "@" + servicio.serviceID + " ping");
+            Console.WriteLine("> [Heartbeat] Service " + servicio.name + "@" + servicio.serviceID + " Heartbeat");
 
         }
 
