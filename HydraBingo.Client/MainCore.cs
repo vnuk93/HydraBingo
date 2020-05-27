@@ -50,5 +50,16 @@ namespace HydraBingo.Client
         {
             client.Delete(new DeleteI { Id = ID });
         }
+
+        public InfoO Info(InfoI input)
+        {
+            return client.Info(input);
+
+        }
+
+        public SearchO Search(SearchI input)
+        {          
+            return client.Search(new SearchI { Name = input.Name });
+        }
     }
 }

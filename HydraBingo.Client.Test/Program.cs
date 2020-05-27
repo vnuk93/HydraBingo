@@ -21,6 +21,7 @@ namespace HydraBingo.Client.Test
                 }
             };
             HydraBingoClient _HydraBingo = new HydraBingoClient("localhost", "1002", config);
+            var hola = _HydraBingo.Search(new SearchI { Name = "HydraBingoClient" });
             Console.ReadLine();
         }
     }
