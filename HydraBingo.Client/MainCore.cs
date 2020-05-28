@@ -31,12 +31,15 @@ namespace HydraBingo.Client
         public int port { get; set; }
         public int status { get; set; }
         public HeartbeatI serviceConfig { get; set; }
+        public HeartbeatO BalancerResume { get; set; }
 
         private void Heartbeat()
         {
             try
             {
-                status = client.Heartbeat(serviceConfig).Status;
+                var res = client.Heartbeat(serviceConfig);
+                status = res.Status;
+                BalancerResume = res;
                 Console.WriteLine("> [HydraBingo] Heartbeat successful");
             }
             catch (Exception e) {
